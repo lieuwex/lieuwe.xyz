@@ -1,0 +1,88 @@
+body {
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	font-family: "Roboto", sans-serif;
+
+	padding: 30px;
+}
+*::selection {
+	background: #00B079;
+	color: white;
+}
+*::-moz-selection {
+	background: #00B079;
+	color: white;
+}
+*::-webkit-selection {
+	background: #00B079;
+	color: white;
+}
+
+a {
+	text-decoration: none;
+}
+
+div.sideBar {
+	position: fixed;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	padding: 30px;
+	-webkit-backface-visibility: hidden;
+}
+
+div.siteHeader {
+	text-align: right;
+}
+
+div.siteHeader:hover > h1 {
+	background-color: white;
+	color: black;
+}
+
+div.siteHeader > h1 {
+	font-weight: 300;
+	text-transform: uppercase;
+	margin-top: 0;
+	display: inline;
+
+	background-color: black;
+	color: white;
+}
+
+div.navButtons > a > div {
+	margin-top: 5px;
+	background-color: black;
+	color: white;
+	width: 100%;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	text-align: right;
+}
+
+div.navButtons > a > div:hover {
+	background-color: white;
+	color: black;
+}
+
+div.content {
+	width: calc(100% - 250px);
+	overflow-x: hidden;
+}
+
+@media only screen and (max-width: 760px) {
+	body {
+		padding-top: 0;
+	}
+
+	div.sideBar {
+		position: relative;
+		width: 100%;
+		padding: 0px;
+		margin-bottom: 30px;
+	}
+
+	div.content {
+		width: 100%;
+	}
+}

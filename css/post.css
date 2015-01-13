@@ -1,0 +1,23 @@
+div.content {
+	line-height: 1;
+}
+
+div.content hr {
+	border: 0;
+	border-bottom: 1px black solid;
+}
+
+div.content h1 {
+	font-weight: 100;
+	font-size: 3.5em;
+	margin: 0;
+	display: inline;
+}
+
+div.content h3 {
+	font-weight: 100;
+	float: right;
+
+	margin: 0;
+	margin-top: 35px;
+}

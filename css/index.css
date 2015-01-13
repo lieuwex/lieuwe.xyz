@@ -1,0 +1,29 @@
+div.content > hr {
+	border: 0;
+	border-bottom: 1px black solid;
+}
+
+div.post {
+	border: 1px black solid;
+	padding: 15px;
+	
+	color: black !important;
+	background-color: white;
+}
+
+div.post:hover {
+	color: white !important;
+	background-color: black;
+}
+
+div.post > * {
+	margin: 0;
+}
+
+div.post > h2 {
+	font-size: 2.5em;
+}
+
+div.post > h3 {
+	margin-top: 5px;
+}

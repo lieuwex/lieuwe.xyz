@@ -1,0 +1,37 @@
+div.project {
+	height: 150px;
+	border: 3px black solid;
+	cursor: pointer;
+	position: relative;
+
+	transition: .15s opacity ease;
+}
+
+div.project > div.projectBack {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	z-index: -1;
+
+	background-position: center;
+	background-size: cover;
+
+	opacity: .7;
+}
+
+div.project:hover {
+	opacity: .7;
+}
+
+div.project > div.projectTitle {
+	position: absolute;
+	bottom: 30px;
+	left: 10px;
+	font-size: 25px;
+	padding: 5px;
+
+	background-color: black;
+	color: white;
+}
