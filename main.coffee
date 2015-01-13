@@ -87,4 +87,4 @@ app.get "/projects", (req, res) ->
 app.get "*", (req, res) ->
 	res.status(404).render "404"
 
-app.listen 1337
+app.listen process.env.PORT || 5000
