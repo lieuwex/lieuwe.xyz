@@ -4,6 +4,8 @@ div.project {
 	cursor: pointer;
 	position: relative;
 
+	margin-bottom: 15px;
+
 	transition: .15s opacity ease;
 }
 
