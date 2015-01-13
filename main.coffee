@@ -42,6 +42,8 @@ githubDate = null
 gh = -> githubClient.events.getFromUser { user: "lieuwex" }, (e, r) -> unless e? then githubDate = r[0].created_at.substring 0, 10
 gh(); setInterval gh, 600000
 
+fs.mkdirSync("./posts") unless fs.existsSync "./posts"
+
 app.get "/", (req, res) ->
 	fs.readdir "./posts", (e, files) ->
 		if e? then onError e, req, res

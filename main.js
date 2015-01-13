@@ -86,6 +86,10 @@
 
   setInterval(gh, 600000);
 
+  if (!fs.existsSync("./posts")) {
+    fs.mkdirSync("./posts");
+  }
+
   app.get("/", function(req, res) {
     return fs.readdir("./posts", function(e, files) {
       if (e != null) {
