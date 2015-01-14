@@ -5,8 +5,6 @@ div.project {
 	position: relative;
 
 	margin-bottom: 15px;
-
-	transition: .15s opacity ease;
 }
 
 div.project > div.projectBack {
@@ -23,8 +21,8 @@ div.project > div.projectBack {
 	opacity: .7;
 }
 
-div.project:hover {
-	opacity: .7;
+div.project:hover > div.projectBack {
+	opacity: .6;
 }
 
 div.project > div.projectTitle {
