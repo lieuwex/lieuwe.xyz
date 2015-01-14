@@ -5,7 +5,7 @@ img {
 }
 
 div.me {
-	display: table;
+	display: table-cell;
 }
 
 @media only screen and (max-width: 760px) {
