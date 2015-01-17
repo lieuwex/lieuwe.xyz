@@ -70,10 +70,10 @@ app.get "/", (req, res) ->
 				return splitted[splitted.length - 1] is "md"
 
 			_.map files, ((file, cb) ->
-				fs.stat "./posts/#{file}", (e, r) ->
+				fs.readFile "./posts/#{file}", (e, r) ->
 					cb e,
 						title: file.split(".")[0]
-						creation: r.ctime.toISOString().substring 0, 10
+						creation: new Date((""+r).split("\n")[0]).toISOString().substring 0, 10
 			), (e, r) ->
 				if e? then onError e, req, res
 				else res.render "index", posts: r
@@ -87,13 +87,11 @@ app.get "/post/:post", (req, res) ->
 
 	fs.readFile path, (e, data) ->
 		unless e?
-			fs.stat path, (e, stats) ->
-				if e? onError e, req, res
-				else
-					res.render "post",
-						title: name
-						content: marked "" + data
-						creation: stats.ctime.toISOString().substring 0, 10
+			splitted = ("" + data).split("\n")
+			res.render "post",
+				title: name
+				content: marked "" + splitted[1..].join("\n")
+				creation: new Date(splitted[0]).toISOString().substring 0, 10
 
 		else if e.code is "ENOENT"
 			res.status(404).render "404"
