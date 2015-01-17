@@ -3,6 +3,28 @@ extends ./main.jade
 block head
 	link(rel="stylesheet", href="css/me.css")
 
+	script(type="application/ld+json").
+		{
+			"@context": "http://schema.org",
+			"@type": "Person",
+			"name": "Lieuwe Rooijakkers",
+			"address": {
+				"@type": "PostalAddress",
+				"postalCode": "2241",
+				"addressLocality": "Wassenaar",
+				"addressCountry": "NL"
+			},
+			"email": "mailto:lieuwerooijakkers@gmail.com",
+			"image": "https://www.gravatar.com/avatar/763664ead00ca1ed8e12db1d5ad703c5?s=175&d=identicon&r=PG",
+			"jobTitle": "Student",
+			"url": "http://www.lieuwex.me/",
+			"worksFor": {
+				"@type": "Organization",
+				"name": "simplyApps",
+				"url": "http://www.simplyApps.nl/"
+			}
+		}
+
 block title
 	title= "Lieuwe Rooijakkers | About me"
 
