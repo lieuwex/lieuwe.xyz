@@ -4,12 +4,12 @@ compress = require "compression"
 minify = require "express-minify"
 fs = require "fs"
 lastfm = require("lastfm").LastFmNode
+request = require "request"
 github = require("github")
 marked = new require("marked")
 nowPlaying = null
 
 app = express()
-#io = require('socket.io')(require("http").createServer app)
 app.set "view engine", "jade"
 
 app.use compress filter: -> yes # Compress EVERYTHING
@@ -42,6 +42,24 @@ githubDate = null
 gh = -> githubClient.events.getFromUser { user: "lieuwex" }, (e, r) -> unless e? then githubDate = r[0].created_at.substring 0, 10
 gh(); setInterval gh, 600000
 
+lastGame = null
+league = ->
+	request.get "https://euw.api.pvp.net/api/lol/euw/v2.2/matchhistory/49307699?api_key=647ce360-313e-4f15-92e9-fef71803ab79", (err, resp, body) ->
+		return if e?
+		matches = JSON.parse(body).matches
+		lastGame = matches[matches.length - 1]
+		champId = lastGame.participants[0].championId
+
+		request.get "https://global.api.pvp.net/api/lol/static-data/euw/v1.2/champion/238?api_key=647ce360-313e-4f15-92e9-fef71803ab79", (err, resp, body) ->
+			champName = JSON.parse(body).name
+
+			lastGame.champName = champName
+			lastGame.url = "http://matchhistory.euw.leagueoflegends.com/en/#match-details/EUW1/#{lastGame.matchId}/41989123"
+
+			console.log lastGame
+
+league(); setInterval league, 300000
+
 fs.mkdirSync("./posts") unless fs.existsSync "./posts"
 
 app.get "/", (req, res) ->
@@ -62,7 +80,7 @@ app.get "/", (req, res) ->
 				else res.render "index", posts: r
 
 app.get "/me", (req, res) ->
-	res.render "me", { nowPlaying, githubDate }
+	res.render "me", { nowPlaying, githubDate, lastGame }
 
 app.get "/post/:post", (req, res) ->
 	name = unescape req.params.post
