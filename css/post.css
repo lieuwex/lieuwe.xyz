@@ -1,5 +1,6 @@
 div.content {
 	line-height: 1;
+	overflow-y: hidden;
 }
 
 div.content hr {
