@@ -1,0 +1,9 @@
+tr > td:first-child {
+	text-align: right;
+	font-weight: bold;
+}
+
+tr > td {
+	padding: 10px;
+	vertical-align: top;
+}

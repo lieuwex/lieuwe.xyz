@@ -101,6 +101,9 @@ app.get "/post/:post", (req, res) ->
 app.get "/projects", (req, res) ->
 	res.render "projects"
 
+app.get "/resume", (req, res) ->
+	res.render "resume"
+
 app.get "*", (req, res) ->
 	res.status(404).render "404"
 
