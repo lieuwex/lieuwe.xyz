@@ -36,6 +36,7 @@ githubClient = new github version: "3.0.0"
 trackStream = lastfmClient.stream("lieuwex")
 trackStream.on "nowPlaying", (track) -> nowPlaying = track
 trackStream.on "stoppedPlaying", -> nowPlaying = null
+trackStream.on "error", (e) -> console.log e
 trackStream.start()
 
 githubDate = null
@@ -46,7 +47,11 @@ lastGame = null
 league = ->
 	request.get "https://euw.api.pvp.net/api/lol/euw/v1.3/game/by-summoner/49307699/recent?api_key=647ce360-313e-4f15-92e9-fef71803ab79", (err, resp, body) ->
 		return if e?
-		lastGame = JSON.parse(body).games[0]
+		try
+			lastGame = JSON.parse(body).games[0]
+		catch e
+			console.log e
+			return
 		champId = lastGame.championId
 
 		if lastGame.subType.indexOf("RANKED_") isnt -1 # LoL Matchhistory is usable on ranked games and is way nicer than LoLKing.
