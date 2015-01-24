@@ -5,6 +5,10 @@ body {
 
 	padding: 30px;
 }
+* {
+	-webkit-backface-visibility: hidden;
+}
+
 *::selection {
 	background: #00B079;
 	color: white;
