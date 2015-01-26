@@ -64,6 +64,21 @@ league = ->
 
 league(); setInterval league, 300000
 
+keys = clicks = ""
+whatpulse = ->
+	request.get "http://api.whatpulse.org/user.php?user=lieuwex&format=json&formatted=yes", (err, resp, body) ->
+		return if e?
+		try
+			parsed = JSON.parse(body)
+
+			keys = parsed.Keys
+			clicks = parsed.Clicks
+		catch e
+			console.log e
+			return
+
+whatpulse(); setInterval whatpulse, 1200000
+
 fs.mkdirSync("./posts") unless fs.existsSync "./posts"
 
 app.get "/", (req, res) ->
@@ -84,7 +99,7 @@ app.get "/", (req, res) ->
 				else res.render "index", posts: r
 
 app.get "/me", (req, res) ->
-	res.render "me", { nowPlaying, githubDate, lastGame }
+	res.render "me", { nowPlaying, githubDate, lastGame, keys, clicks }
 
 app.get "/post/:post", (req, res) ->
 	name = unescape req.params.post
