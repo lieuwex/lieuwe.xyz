@@ -60,7 +60,11 @@ league = ->
 			lastGame.url = "http://www.lolking.net/summoner/euw/49307699#matches/#{lastGame.gameId}"
 
 		request.get "https://global.api.pvp.net/api/lol/static-data/euw/v1.2/champion/#{champId}?api_key=247b1222-b01e-4c55-89a7-fc86973b9084", (err, resp, body) ->
-			lastGame.champName = JSON.parse(body).name
+			try
+				lastGame.champName = JSON.parse(body).name
+			catch e
+				console.log e
+				lastGame.champName = undefined
 
 league(); setInterval league, 300000
 
