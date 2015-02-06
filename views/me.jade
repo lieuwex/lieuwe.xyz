@@ -31,9 +31,9 @@ block title
 block content
 	- var age = ~~((new Date().getTime() - new Date(1998, 8, 18).getTime()) / 31556952000);
 	img(src="https://www.gravatar.com/avatar/763664ead00ca1ed8e12db1d5ad703c5?s=175&d=identicon&r=PG", id="profilePicture")
-	div.me
-		|	I'm Lieuwe Rooijakkers, a guy from <b>Wassenaar, The Netherlands</b>, <b>#{age} years</b> old.<br>
-		|	I'm developer at <a href="http://simplyapps.nl/">simplyApps</a>.<br><br>
+	div.me(itemscope itemtype="http://data-vocabulary.org/Person")
+		|	I'm <span itemprop="name">Lieuwe Rooijakkers</span>, a guy from <b itemprop="address" itemscope itemtype="http://data-vocabulary.org/Address"><span itemprop="locality">Wassenaar</span>, <span itemprop="country-name">The Netherlands</span></b>, <b>#{age} years</b> old.<br>
+		|	I'm developer at <a href="http://simplyapps.nl/" itemprop="affiliation">simplyApps</a>.<br><br>
 		|	I have experience with front- and back-end development using C#, Coffeescript, Javascript, Golang, Python and platforms such as MongoDB and Meteor.<br>
 		|	When bored I also fiddle around with various stuff ranging from computer vision to Android app development. (While not being seriously good at those).<br><br>
 		|	It looks like I'm 
