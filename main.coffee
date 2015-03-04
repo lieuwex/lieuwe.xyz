@@ -88,6 +88,7 @@ fs.mkdirSync("./posts") unless fs.existsSync "./posts"
 chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz01234556789"
 fs.writeFileSync("./shorted.json", "{}") unless fs.existsSync "./shorted.json"
 _shortedLinks = JSON.parse fs.readFileSync "./shorted.json"
+_saveShortedLinks = -> fs.writeFileSync "./shorted.json", JSON.stringify _shortedLinks
 setShorted = (long) ->
 	shortName = null
 	for x of _shortedLinks
@@ -100,12 +101,20 @@ setShorted = (long) ->
 			arr[i] = chars[~~(Math.random() * (chars.length + 1))]
 		shortName = arr.join ""
 
-		_shortedLinks[shortName] = long
-		fs.writeFileSync "./shorted.json", JSON.stringify _shortedLinks
+		_shortedLinks[shortName] =
+			long: long
+			clicks: 0
+
+		_saveShortedLinks()
 
 	return shortName
 
-getShorted = (short) -> _shortedLinks[short]
+getShorted = (short) ->
+	unless _shortedLinks[short]? then return null
+
+	_shortedLinks[short].clicks++
+	_saveShortedLinks()
+	return _shortedLinks[short].long
 
 app.get "/", (req, res) ->
 	fs.readdir "./posts", (e, files) ->
@@ -161,6 +170,15 @@ app.post "/short", (req, res) ->
 
 app.get "/:short", (req, res) ->
 	if (val = getShorted req.params.short)? then res.redirect val
+	else res.status(404).render "404"
+
+app.get "/:short/stats", (req, res) ->
+	if (val = _shortedLinks[req.params.short])?
+		res.render "stats",
+			short: req.params.short
+			long: val.long
+			clicks: val.clicks
+
 	else res.status(404).render "404"
 
 port = process.env.PORT || 5000
