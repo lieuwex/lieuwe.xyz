@@ -85,6 +85,28 @@ whatpulse(); setInterval whatpulse, 1200000
 
 fs.mkdirSync("./posts") unless fs.existsSync "./posts"
 
+chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz01234556789"
+fs.writeFileSync("./shorted.json", "{}") unless fs.existsSync "./shorted.json"
+_shortedLinks = JSON.parse fs.readFileSync "./shorted.json"
+setShorted = (long) ->
+	shortName = null
+	for x of _shortedLinks
+		if _shortedLinks[x] is long
+			shortName = x
+
+	unless shortName?
+		arr = new Array 5
+		for i in [0...5]
+			arr[i] = chars[~~(Math.random() * (chars.length + 1))]
+		shortName = arr.join ""
+
+		_shortedLinks[shortName] = long
+		fs.writeFileSync "./shorted.json", JSON.stringify _shortedLinks
+
+	return shortName
+
+getShorted = (short) -> _shortedLinks[short]
+
 app.get "/", (req, res) ->
 	fs.readdir "./posts", (e, files) ->
 		if e? then onError e, req, res
@@ -128,8 +150,18 @@ app.get "/projects", (req, res) ->
 app.get "/resume", (req, res) ->
 	res.render "resume"
 
-app.get "*", (req, res) ->
-	res.status(404).render "404"
+app.post "/short", (req, res) ->
+	s = ""
+	req.on "data", (blob) -> s += blob
+	req.on "end", ->
+		try
+			res.status(201).end "http://www.lieuwex.me/#{setShorted s}"
+		catch e
+			res.status(500).end e.toString()
+
+app.get "/:short", (req, res) ->
+	if (val = getShorted req.params.short)? then res.redirect val
+	else res.status(404).render "404"
 
 port = process.env.PORT || 5000
 app.listen port, -> console.log "Running on port #{port}"
