@@ -1,3 +1,5 @@
+IP = "94.209.136.195"
+
 _ = require "nimble"
 express = require "express"
 compress = require "compression"
@@ -167,6 +169,12 @@ app.post "/short", (req, res) ->
 			res.status(201).end "http://www.lieuwex.me/#{setShorted s}"
 		catch e
 			res.status(500).end e.toString()
+
+app.get "/golocal/:port?", (req, res) ->
+	url = "http://#{IP}"
+	if (port = req.params.port)? then url += ":#{port}"
+	res.redirect url
+app.get "/local", (req, res) -> res.end IP
 
 app.get "/:short", (req, res) ->
 	if (val = getShorted req.params.short)? then res.redirect val
