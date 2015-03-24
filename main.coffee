@@ -48,20 +48,14 @@ gh(); setInterval gh, 600000
 lastGame = null
 league = ->
 	request.get "https://euw.api.pvp.net/api/lol/euw/v1.3/game/by-summoner/49307699/recent?api_key=247b1222-b01e-4c55-89a7-fc86973b9084", (err, resp, body) ->
-		return if e?
 		try
 			lastGame = JSON.parse(body).games[0]
+			lastGame.url = "http://matchhistory.euw.leagueoflegends.com/en/#match-details/EUW1/#{lastGame.gameId}/41989123"
 		catch e
 			console.log e
 			return
-		champId = lastGame.championId
 
-		if lastGame.subType.indexOf("RANKED_") isnt -1 # LoL Matchhistory is usable on ranked games and is way nicer than LoLKing.
-			lastGame.url = "http://matchhistory.euw.leagueoflegends.com/en/#match-details/EUW1/#{lastGame.gameId}/41989123"
-		else # Normal games on LoL matchhistory are only visible for the players of the match. Use LoLKing instead.
-			lastGame.url = "http://www.lolking.net/summoner/euw/49307699#matches/#{lastGame.gameId}"
-
-		request.get "https://global.api.pvp.net/api/lol/static-data/euw/v1.2/champion/#{champId}?api_key=247b1222-b01e-4c55-89a7-fc86973b9084", (err, resp, body) ->
+		request.get "https://global.api.pvp.net/api/lol/static-data/euw/v1.2/champion/#{lastGame.championId}?api_key=247b1222-b01e-4c55-89a7-fc86973b9084", (err, resp, body) ->
 			try
 				lastGame.champName = JSON.parse(body).name
 			catch e
