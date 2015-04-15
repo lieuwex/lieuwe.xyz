@@ -5,9 +5,6 @@ body {
 
 	padding: 30px;
 }
-* {
-	-webkit-backface-visibility: hidden;
-}
 
 *::selection {
 	background: #00B079;
@@ -32,7 +29,6 @@ div.sideBar {
 	top: 0;
 	bottom: 0;
 	padding: 30px;
-	-webkit-backface-visibility: hidden;
 }
 
 div.siteHeader {
