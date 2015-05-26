@@ -79,7 +79,21 @@ whatpulse = ->
 
 whatpulse(); setInterval whatpulse, 1200000
 
+posts = []
 fs.mkdirSync("./posts") unless fs.existsSync "./posts"
+fs.readdir "./posts", (e, files) ->
+	unless e?
+		posts = []
+
+		files = _.filter files, (f) ->
+			splitted = f.split "."
+			return splitted[splitted.length - 1] is "md"
+
+		for file in files
+			fs.readFile "./posts/#{file}", (e, r) ->
+				unless e? then posts.push
+					title: file.split(".")[0]
+					creation: new Date((""+r).split("\n")[0]).toISOString().substring 0, 10
 
 chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz01234556789"
 fs.writeFileSync("./shorted.json", "{}") unless fs.existsSync "./shorted.json"
@@ -113,21 +127,7 @@ getShorted = (short) ->
 	return _shortedLinks[short].long
 
 app.get "/", (req, res) ->
-	fs.readdir "./posts", (e, files) ->
-		if e? then onError e, req, res
-		else
-			files = _.filter files, (f) ->
-				splitted = f.split "."
-				return splitted[splitted.length - 1] is "md"
-
-			_.map files, ((file, cb) ->
-				fs.readFile "./posts/#{file}", (e, r) ->
-					cb e,
-						title: file.split(".")[0]
-						creation: new Date((""+r).split("\n")[0]).toISOString().substring 0, 10
-			), (e, r) ->
-				if e? then onError e, req, res
-				else res.render "index", posts: r
+	res.render "index", { posts }
 
 app.get "/me", (req, res) ->
 	res.render "me", { nowPlaying, githubDate, lastGame, keys, clicks }
