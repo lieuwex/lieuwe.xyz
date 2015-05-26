@@ -164,9 +164,10 @@ app.post "/short", (req, res) ->
 		catch e
 			res.status(500).end e.toString()
 
-app.get "/golocal/:port?", (req, res) ->
+app.get "/golocal/:port?/:path?", (req, res) ->
 	url = "http://#{IP}"
 	if (port = req.params.port)? then url += ":#{port}"
+	if (path = req.params.path)? then url += "/#{path}"
 	res.redirect url
 app.get "/local", (req, res) -> res.end IP
 
