@@ -29,6 +29,9 @@ onError = (err, req, res, next) ->
 	res.status(500).end "dat 500 tho."
 app.use onError
 
+# converts minutes to milliseconds.
+minutes = (val) -> val * 60 * 1000
+
 lastfmClient = new lastfm
 	"api_key": "b68ffcb32c581066eff2eaa6443252d4"
 	"secret": "92273fdb7205a5800f44555ddd6cc162"
@@ -43,7 +46,7 @@ trackStream.start()
 
 githubDate = null
 gh = -> githubClient.events.getFromUser { user: "lieuwex" }, (e, r) -> unless e? then githubDate = r[0].created_at.substring 0, 10
-gh(); setInterval gh, 600000
+gh(); setInterval gh, minutes 20
 
 lastGame = null
 league = ->
@@ -62,7 +65,7 @@ league = ->
 				console.log e
 				lastGame.champName = undefined
 
-league(); setInterval league, 300000
+league(); setInterval league, minutes 15
 
 keys = clicks = ""
 whatpulse = ->
@@ -77,7 +80,7 @@ whatpulse = ->
 			console.log e
 			return
 
-whatpulse(); setInterval whatpulse, 1200000
+whatpulse(); setInterval whatpulse, minutes 120
 
 posts = []
 fs.mkdirSync("./posts") unless fs.existsSync "./posts"
