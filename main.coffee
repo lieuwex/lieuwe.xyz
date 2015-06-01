@@ -178,6 +178,8 @@ app.get "/local", (req, res) -> res.end IP
 app.get "/pgp", (req, res) ->
 	res.end pgp
 
+# === Don't add routes beneath here, fucked me up enough times.
+
 app.get "/:short", (req, res) ->
 	if (val = getShorted req.params.short)? then res.redirect val
 	else res.status(404).render "404"
