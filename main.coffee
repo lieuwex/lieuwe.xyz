@@ -95,6 +95,10 @@ fs.readdir "./posts", (e, files) ->
 					title: file.split(".")[0]
 					creation: new Date((""+r).split("\n")[0]).toISOString().substring 0, 10
 
+pgp = null
+fs.readFile "./key.asc", { encoding: "utf8" }, (e, r) ->
+	pgp = r unless e?
+
 chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz01234556789"
 fs.writeFileSync("./shorted.json", "{}") unless fs.existsSync "./shorted.json"
 _shortedLinks = JSON.parse fs.readFileSync "./shorted.json"
@@ -170,6 +174,9 @@ app.get "/golocal/:port?/:path?", (req, res) ->
 	if (path = req.params.path)? then url += "/#{path}"
 	res.redirect url
 app.get "/local", (req, res) -> res.end IP
+
+app.get "/pgp", (req, res) ->
+	res.end pgp
 
 app.get "/:short", (req, res) ->
 	if (val = getShorted req.params.short)? then res.redirect val
