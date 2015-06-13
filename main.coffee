@@ -1,6 +1,6 @@
 IP = "94.209.136.195"
 
-_ = require "nimble"
+_ = require "lodash"
 express = require "express"
 compress = require "compression"
 minify = require "express-minify"
