@@ -105,14 +105,16 @@ fs.readFile "./key.asc", { encoding: "utf8" }, (e, r) ->
 chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz01234556789"
 fs.writeFileSync("./shorted.json", "{}") unless fs.existsSync "./shorted.json"
 _shortedLinks = JSON.parse fs.readFileSync "./shorted.json"
-_saveShortedLinks = -> fs.writeFileSync "./shorted.json", JSON.stringify _shortedLinks
-setShorted = (long) ->
+_saveShortedLinks = (cb) -> fs.writeFile "./shorted.json", JSON.stringify(_shortedLinks), (e, r) -> cb? e, r
+setShorted = (long, cb) ->
 	shortName = null
 	for x of _shortedLinks
 		if _shortedLinks[x] is long
 			shortName = x
 
-	unless shortName?
+	if shortName?
+		cb undefined, shortName
+	else
 		arr = new Array 5
 		for i in [0...5]
 			arr[i] = chars[~~(Math.random() * (chars.length + 1))]
@@ -122,16 +124,17 @@ setShorted = (long) ->
 			long: long
 			clicks: 0
 
-		_saveShortedLinks()
+		_saveShortedLinks (e, r) -> cb e, shortName
 
-	return shortName
+	undefined
 
 getShorted = (short) ->
 	unless _shortedLinks[short]? then return null
 
 	_shortedLinks[short].clicks++
 	_saveShortedLinks()
-	return _shortedLinks[short].long
+
+	_shortedLinks[short].long
 
 app.get "/", (req, res) ->
 	res.render "index", { posts }
@@ -166,10 +169,11 @@ app.post "/short", (req, res) ->
 	s = ""
 	req.on "data", (blob) -> s += blob
 	req.on "end", ->
-		try
-			res.status(201).end "http://www.lieuwex.me/#{setShorted s}"
-		catch e
-			res.status(500).end e.toString()
+		setShorted s, (e, r) ->
+			if e?
+				res.status(500).end e.toString()
+			else
+				res.status(201).end "http://www.lieuwex.me/#{r}"
 
 app.get "/golocal/:port?/:path?", (req, res) ->
 	url = "http://#{IP}"
