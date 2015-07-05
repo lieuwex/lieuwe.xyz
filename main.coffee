@@ -83,20 +83,21 @@ whatpulse = ->
 whatpulse(); setInterval whatpulse, minutes 120
 
 posts = []
-fs.mkdirSync("./posts") unless fs.existsSync "./posts"
-fs.readdir "./posts", (e, files) ->
-	unless e?
-		posts = []
+fs.mkdirSync './posts' unless fs.existsSync './posts'
+fs.readdir './posts', (e, files) ->
+	return if e?
 
-		files = _.filter files, (f) ->
-			splitted = f.split "."
-			return splitted[splitted.length - 1] is "md"
+	posts = []
+	files = _.filter files, (f) -> _.last(f.split '.') is 'md'
+	for f in files
+		fs.readFile "./posts/#{f}", (e, r) ->
+			return if e?
 
-		for file in files
-			fs.readFile "./posts/#{file}", (e, r) ->
-				unless e? then posts.push
-					title: file.split(".")[0]
-					creation: new Date((""+r).split("\n")[0]).toISOString().substring 0, 10
+			splitted = r.toString().split '\n'
+			posts.push
+				title: f.split('.')[0]
+				creation: new Date(splitted[0]).toISOString().substring 0, 10
+				content: marked splitted[1..].join '\n'
 
 pgp = null
 fs.readFile "./key.asc", { encoding: "utf8" }, (e, r) ->
@@ -144,20 +145,14 @@ app.get "/me", (req, res) ->
 
 app.get "/post/:post", (req, res) ->
 	name = unescape req.params.post
-	path = "./posts/#{name}.md"
+	post = _.find posts, (p) -> p.title is name
 
-	fs.readFile path, (e, data) ->
-		unless e?
-			splitted = ("" + data).split("\n")
-			res.render "post",
-				title: name
-				content: marked "" + splitted[1..].join("\n")
-				creation: new Date(splitted[0]).toISOString().substring 0, 10
-
-		else if e.code is "ENOENT"
-			res.status(404).render "404"
-
-		else onError e, req, res
+	if post?
+		res.render 'post', post
+	else if posts.length > 0
+		res.status(404).render '404'
+	else
+		onError e, req, res
 
 app.get "/projects", (req, res) ->
 	res.render "projects"
