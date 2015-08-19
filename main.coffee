@@ -182,7 +182,7 @@ app.get "/golocal/:port?/:path?", (req, res) ->
 	res.redirect url
 app.get "/local", (req, res) -> res.end IP
 
-app.get "/pgp", (req, res) ->
+app.get "/pgp(.asc)?", (req, res) ->
 	res.end pgp
 
 # === Don't add routes beneath here, fucked me up enough times.
