@@ -154,7 +154,7 @@ app.get "/me", (req, res) ->
 
 app.get "/post/:post", (req, res) ->
 	name = unescape req.params.post
-	post = _.find posts, (p) -> p.title is name
+	post = _.find posts, (p) -> p.title.toLowerCase() is name.toLowerCase()
 
 	if post?
 		res.render 'post', post
