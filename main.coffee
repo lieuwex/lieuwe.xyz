@@ -8,7 +8,11 @@ fs = require "fs"
 lastfm = require("lastfm").LastFmNode
 request = require "request"
 github = require("github")
-marked = new require("marked")
+
+marked = require 'marked'
+hljs = require 'highlight.js'
+marked.setOptions highlight: (code, lang) -> hljs.highlight(lang, code).value
+
 nowPlaying = null
 
 log = console.log
