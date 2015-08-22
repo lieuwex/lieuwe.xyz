@@ -94,7 +94,7 @@ fs.readdir './posts', (e, files) ->
 
 	posts = []
 	files = _.filter files, (f) -> _.last(f.split '.') is 'md'
-	for f in files
+	for f in files then do (f) ->
 		fs.readFile "./posts/#{f}", (e, r) ->
 			return if e?
 
