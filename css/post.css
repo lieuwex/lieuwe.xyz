@@ -26,7 +26,7 @@ div.content h3 {
 }
 
 div.content img {
-	width: 100%;
+	max-width: 100%;
 }
 
 div.content pre {
