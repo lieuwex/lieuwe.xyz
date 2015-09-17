@@ -4,6 +4,14 @@ block head
 	link(rel="stylesheet", href="/css/post.css")
 	link(rel="stylesheet", href="/css/hljs.css")
 
+	script(type="application/ld+json").
+		{
+			"@context": "http://schema.org",
+			"@type": "BlogPosting",
+			"headline": "#{title}",
+			"datePublished": "#{creation}"
+		}
+
 block title
 	title= "Lieuwe Rooijakkers | " + title
 
