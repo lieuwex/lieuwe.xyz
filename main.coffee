@@ -108,6 +108,11 @@ fs.readdir './posts', (e, files) ->
 				creation: new Date(splitted[0]).toISOString().substring 0, 10
 				content: marked splitted[1..].join '\n'
 
+			posts = _(posts)
+				.sortBy (p) -> p.creation
+				.reverse()
+				.value()
+
 pgp = null
 fs.readFile "./key.asc", { encoding: "utf8" }, (e, r) ->
 	pgp = r unless e?
