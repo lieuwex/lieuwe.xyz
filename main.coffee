@@ -74,7 +74,7 @@ league = ->
 				console.log e
 				lastGame.champName = undefined
 
-league(); setInterval league, minutes 15
+league(); setInterval league, minutes 60
 
 keys = clicks = ""
 whatpulse = ->
