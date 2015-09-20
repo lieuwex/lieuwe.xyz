@@ -53,6 +53,10 @@ block content
 			else
 				| Details of my last match on League of Legends can be found <a href="#{lastGame.url}">here</a>.
 
+		if bestwpm && averagewpm
+			<br><br>
+			| My average WPM of my last 10 races on <a href="http://play.typeracer.com/">TypeRacer</a> is #{averagewpm}, while my best is #{bestwpm}.
+
 		if keys && clicks
 			<br><br>
 			| I currently have pressed <b>#{keys}</b> keys and clicked <b>#{clicks}</b> times. More details <a href="http://whatpulse.org/lieuwex/computer/Beneden">here</a>.

@@ -91,6 +91,21 @@ whatpulse = ->
 
 whatpulse(); setInterval whatpulse, minutes 120
 
+bestwpm = averagewpm = null
+typeracer = ->
+	request.get 'http://typeracerdata.appspot.com/users?id=tr:lieuwex', (err, resp, body) ->
+		return if e?
+		try
+			parsed = JSON.parse body
+
+			bestwpm    = Math.round parsed.tstats.bestGameWpm
+			averagewpm = Math.round parsed.tstats.recentAvgWpm
+		catch e
+			console.log e
+			return
+
+typeracer(); setInterval typeracer, minutes 60
+
 posts = []
 fs.mkdirSync './posts' unless fs.existsSync './posts'
 fs.readdir './posts', (e, files) ->
@@ -155,7 +170,7 @@ app.get "/", (req, res) ->
 	res.render "index", { posts }
 
 app.get "/me", (req, res) ->
-	res.render "me", { nowPlaying, githubDate, lastGame, keys, clicks }
+	res.render "me", { nowPlaying, githubDate, lastGame, keys, clicks, bestwpm, averagewpm }
 
 app.get "/post/:post", (req, res) ->
 	name = unescape req.params.post
