@@ -1,2 +1,2 @@
-# lieuwex.me
+# lieuwe.xyz
 My site.

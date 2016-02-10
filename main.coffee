@@ -197,7 +197,7 @@ app.post "/short", (req, res) ->
 			if e?
 				res.status(500).end e.toString()
 			else
-				res.status(201).end "http://www.lieuwex.me/#{r}"
+				res.status(201).end "http://www.lieuwe.xyz/#{r}"
 
 app.get "/golocal/:port?/:path?", (req, res) ->
 	url = "http://#{IP}"
