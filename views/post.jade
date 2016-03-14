@@ -16,12 +16,17 @@ block title
 	title= "Lieuwe Rooijakkers | " + title
 
 block content
-	h1 #{title}
-	h3 #{creation}
-	hr
-	| !{content}
-	hr
-	div#disqus_thread
+	article
+		hgroup
+			h1 #{title}
+			h3 #{creation}
+		hr
+		section
+			| !{content}
+		hr
+		section
+			article
+				div#disqus_thread
 
 	script.
 		var disqus_shortname = 'lieuwex';
