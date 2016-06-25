@@ -5,15 +5,12 @@ express = require "express"
 compress = require "compression"
 minify = require "express-minify"
 fs = require "fs"
-lastfm = require("lastfm").LastFmNode
-request = require "request"
-github = require("github")
+
+{ Sources } = require './sources.coffee'
 
 marked = require 'marked'
 hljs = require 'highlight.js'
 marked.setOptions highlight: (code, lang) -> hljs.highlight(lang, code).value
-
-nowPlaying = null
 
 log = console.log
 error = console.error
@@ -37,74 +34,6 @@ onError = (err, req, res, next) ->
 	console.log err.stack
 	res.status(500).end "dat 500 tho."
 app.use onError
-
-# converts minutes to milliseconds.
-minutes = (val) -> val * 60 * 1000
-
-lastfmClient = new lastfm
-	"api_key": "b68ffcb32c581066eff2eaa6443252d4"
-	"secret": "92273fdb7205a5800f44555ddd6cc162"
-
-githubClient = new github version: "3.0.0"
-
-trackStream = lastfmClient.stream("lieuwex")
-trackStream.on "nowPlaying", (track) -> nowPlaying = track
-trackStream.on "stoppedPlaying", -> nowPlaying = null
-trackStream.on "error", (e) -> console.log e
-trackStream.start()
-
-githubDate = null
-gh = -> githubClient.events.getFromUser { user: "lieuwex" }, (e, r) -> unless e? then githubDate = r[0].created_at.substring 0, 10
-gh(); setInterval gh, minutes 20
-
-lastGame = null
-league = ->
-	request.get "https://euw.api.pvp.net/api/lol/euw/v1.3/game/by-summoner/49307699/recent?api_key=247b1222-b01e-4c55-89a7-fc86973b9084", (err, resp, body) ->
-		try
-			lastGame = JSON.parse(body).games[0]
-			lastGame.url = "http://matchhistory.euw.leagueoflegends.com/en/#match-details/EUW1/#{lastGame.gameId}/41989123"
-		catch e
-			console.log e
-			return
-
-		request.get "https://global.api.pvp.net/api/lol/static-data/euw/v1.2/champion/#{lastGame.championId}?api_key=247b1222-b01e-4c55-89a7-fc86973b9084", (err, resp, body) ->
-			try
-				lastGame.champName = JSON.parse(body).name
-			catch e
-				console.log e
-				lastGame.champName = undefined
-
-league(); setInterval league, minutes 60
-
-keys = clicks = ""
-whatpulse = ->
-	request.get "http://api.whatpulse.org/user.php?user=lieuwex&format=json&formatted=yes", (err, resp, body) ->
-		return if e?
-		try
-			parsed = JSON.parse(body)
-
-			keys = parsed.Keys
-			clicks = parsed.Clicks
-		catch e
-			console.log e
-			return
-
-whatpulse(); setInterval whatpulse, minutes 120
-
-bestwpm = averagewpm = null
-typeracer = ->
-	request.get 'http://typeracerdata.appspot.com/users?id=tr:lieuwex', (err, resp, body) ->
-		return if e?
-		try
-			parsed = JSON.parse body
-
-			bestwpm    = Math.round parsed.tstats.bestGameWpm
-			averagewpm = Math.round parsed.tstats.recentAvgWpm
-		catch e
-			console.log e
-			return
-
-typeracer(); setInterval typeracer, minutes 60
 
 posts = []
 fs.mkdirSync './posts' unless fs.existsSync './posts'
@@ -170,7 +99,18 @@ app.get "/", (req, res) ->
 	res.render "index", { posts }
 
 app.get "/me", (req, res) ->
-	res.render "me", { nowPlaying, githubDate, lastGame, keys, clicks, bestwpm, averagewpm }
+	whatpulse = Sources.getLastData 'whatpulse'
+	typeracer = Sources.getLastData 'typeracer'
+
+	res.render 'me',
+		nowPlaying: Sources.getLastData 'lastfm'
+		githubDate: Sources.getLastData 'github'
+
+		keys: whatpulse.keys
+		clicks: whatpulse.clicks
+
+		bestwpm: typeracer.bestwpm
+		averagewpm: typeracer.averagewpm
 
 app.get "/post/:post", (req, res) ->
 	name = unescape req.params.post

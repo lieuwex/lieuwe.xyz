@@ -46,12 +46,6 @@ block content
 		if githubDate
 			<br><br>
 			| My last <i>public</i> activity on GitHub was on <b>#{githubDate}</b>.
-		if lastGame
-			<br><br>
-			if lastGame.champName
-				| My last game on League of Legends was with <b>#{lastGame.champName}</b>, details of the match can be found <a href="#{lastGame.url}">here</a>.
-			else
-				| Details of my last match on League of Legends can be found <a href="#{lastGame.url}">here</a>.
 
 		if bestwpm && averagewpm
 			<br><br>
