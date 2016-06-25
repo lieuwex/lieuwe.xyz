@@ -33,6 +33,10 @@ div.sideBar {
 
 div.siteHeader {
 	text-align: right;
+	border: 1px white solid;
+}
+div.siteHeader:hover {
+	border-color: black;
 }
 
 div.siteHeader:hover > h1 {
@@ -55,18 +59,19 @@ div.siteHeader > h1 {
 }
 
 div.navButtons > a > div {
-	margin-top: 5px;
+	margin-top: 4px;
 	background-color: black;
 	color: white;
-	width: 100%;
 	padding-top: 5px;
 	padding-bottom: 5px;
 	text-align: right;
+	border: 1px white solid;
 }
 
 div.navButtons > a > div:hover {
 	background-color: white;
 	color: black;
+	border-color: black;
 }
 
 div.content {
