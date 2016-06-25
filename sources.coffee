@@ -88,7 +88,11 @@ mksrc 'typeracer', minutes(60), (cb) ->
 
 githubClient = new github version: '3.0.0'
 mksrc 'github', minutes(20), (cb) ->
-	githubClient.activity.getEventsForUser { user: 'lieuwex' }, (e, r) ->
+	githubClient.activity.getEventsForUser {
+		user: 'lieuwex'
+		page: 1
+		per_page: 1
+	}, (e, r) ->
 		if e? then cb e, null
 		else cb null, r[0].created_at.substring 0, 10
 
