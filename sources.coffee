@@ -4,11 +4,12 @@ lastfm = require('lastfm').LastFmNode
 
 class Source
 	constructor: (@name, @onEnable, @options = {}) ->
+		@enabled = no
 		@_intervalId = undefined
 		@_lastResult = undefined
 
 	enable: ->
-		return if @_intervalId? # already enabled
+		return if @enabled
 		fn = =>
 			@onEnable (err, res) =>
 				if err?
@@ -21,10 +22,16 @@ class Source
 			@_intervalId = setInterval fn, @options.interval
 		fn()
 
+		@enabled = yes
+		undefined
+
 	disable: ->
+		return unless @enabled
 		clearInterval @_intervalId
 		@_intervalId = undefined
 		@onDisable?()
+		@enabled = no
+		undefined
 
 class Sources
 	@_sources: {}
