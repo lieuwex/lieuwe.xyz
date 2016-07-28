@@ -1,5 +1,7 @@
 IP = "94.209.156.25"
 
+require './log.coffee'
+
 _ = require "lodash"
 express = require "express"
 compress = require "compression"
@@ -11,11 +13,6 @@ fs = require "fs"
 marked = require 'marked'
 hljs = require 'highlight.js'
 marked.setOptions highlight: (code, lang) -> hljs.highlight(lang, code).value
-
-log = console.log
-error = console.error
-console.log = (str) -> log "\u001b[90m#{new Date().toISOString()}\u001b[39m #{str}"
-console.error = (str) -> error "\u001b[31m#{new Date().toISOString()}\u001b[39m #{str}"
 
 app = express()
 app.set "view engine", "jade"
