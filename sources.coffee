@@ -10,10 +10,12 @@ class Source
 
 	enable: ->
 		return if @enabled
+		console.log "enabling service '#{@name}'"
 		fn = =>
+			console.log "running service '#{@name}'"
 			@onEnable (err, res) =>
 				if err?
-					console.error "error while fetching data from #{@name}", err
+					console.error "error while fetching data from service '#{@name}'", err
 				else
 					@_lastResult = res
 					@_update?()
@@ -27,6 +29,7 @@ class Source
 
 	disable: ->
 		return unless @enabled
+		console.log "disabling service '#{@name}'"
 		clearInterval @_intervalId
 		@_intervalId = undefined
 		@onDisable?()
