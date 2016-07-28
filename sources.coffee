@@ -1,4 +1,4 @@
-request = require 'request'
+fetch = require 'node-fetch'
 github = require 'github'
 lastfm = require('lastfm').LastFmNode
 
@@ -69,32 +69,22 @@ mksrc = (name, interval, fn) ->
 minutes = (val) -> val * 60 * 1000
 
 mksrc 'whatpulse', minutes(120), (cb) ->
-	request.get 'http://api.whatpulse.org/user.php?user=lieuwex&format=json&formatted=yes', (err, resp, body) ->
-		if e?
-			cb e, null
-			return
-
-		parsed = null
-		try parsed = JSON.parse(body)
-		catch e then cb e, null
-
-		cb null,
-			keys: parsed.Keys
-			clicks: parsed.Clicks
+	fetch('http://api.whatpulse.org/user.php?user=lieuwex&format=json&formatted=yes')
+		.then (res) -> res.json()
+		.catch (e) -> cb e, null
+		.then (res) ->
+			cb null,
+				keys: res.Keys
+				clicks: res.Clicks
 
 mksrc 'typeracer', minutes(60), (cb) ->
-	request.get 'http://typeracerdata.appspot.com/users?id=tr:lieuwex', (err, resp, body) ->
-		if e?
-			cb e, null
-			return
-
-		parsed = null
-		try parsed = JSON.parse body
-		catch e then cb e, null
-
-		cb null,
-			bestwpm:    Math.round parsed.tstats.bestGameWpm
-			averagewpm: Math.round parsed.tstats.recentAvgWpm
+	fetch('http://typeracerdata.appspot.com/users?id=tr:lieuwex')
+		.then (res) -> res.json()
+		.catch (e) -> cb e, null
+		.then (res) ->
+			cb null,
+				bestwpm:    Math.round res.tstats.bestGameWpm
+				averagewpm: Math.round res.tstats.recentAvgWpm
 
 githubClient = new github version: '3.0.0'
 mksrc 'github', minutes(20), (cb) ->
