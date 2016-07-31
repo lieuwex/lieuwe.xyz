@@ -17,6 +17,7 @@ class Source
 				if err?
 					console.error "error while fetching data from service '#{@name}'", err
 				else
+					console.log "got new data from service '#{@name}'"
 					@_lastResult = res
 					@_update?()
 

@@ -1,12 +1,11 @@
-IP = "94.209.156.25"
+LOCAL_IP = "94.209.156.25"
 
 require './log.coffee'
 
-_ = require "lodash"
-express = require "express"
-compress = require "compression"
-minify = require "express-minify"
-fs = require "fs"
+_ = require 'lodash'
+express = require 'express'
+minify = require 'express-minify'
+fs = require 'fs'
 
 { Sources } = require './sources.coffee'
 
@@ -15,21 +14,20 @@ hljs = require 'highlight.js'
 marked.setOptions highlight: (code, lang) -> hljs.highlight(lang, code).value
 
 app = express()
-app.set "view engine", "jade"
+app.set 'view engine', 'jade'
 
-app.use compress filter: -> yes # Compress EVERYTHING
 app.use minify()
-app.use express.static __dirname + "/public"
-app.use "/css", express.static __dirname + "/css"
+app.use express.static __dirname + '/public'
+app.use '/css', express.static __dirname + '/css'
 
 app.use (req, res, next) ->
-	res.header "Access-Control-Allow-Origin", "*"
-	res.header "Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept"
+	res.header 'Access-Control-Allow-Origin', '*'
+	res.header 'Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept'
 	next()
 
 onError = (err, req, res, next) ->
-	console.log err.stack
-	res.status(500).end "dat 500 tho."
+	console.error err.stack
+	res.status(500).end 'dat 500 tho.'
 app.use onError
 
 posts = []
@@ -55,13 +53,13 @@ fs.readdir './posts', (e, files) ->
 				.value()
 
 pgp = null
-fs.readFile "./key.asc", { encoding: "utf8" }, (e, r) ->
+fs.readFile './key.asc', { encoding: 'utf8' }, (e, r) ->
 	pgp = r unless e?
 
-app.get "/", (req, res) ->
-	res.render "index", { posts }
+app.get '/', (req, res) ->
+	res.render 'index', { posts }
 
-app.get "/me", (req, res) ->
+app.get '/me', (req, res) ->
 	whatpulse = Sources.getLastData 'whatpulse'
 	typeracer = Sources.getLastData 'typeracer'
 
@@ -75,7 +73,7 @@ app.get "/me", (req, res) ->
 		bestwpm: typeracer.bestwpm
 		averagewpm: typeracer.averagewpm
 
-app.get "/post/:post", (req, res) ->
+app.get '/post/:post', (req, res) ->
 	name = unescape req.params.post
 	post = _.find posts, (p) -> p.title.toLowerCase() is name.toLowerCase()
 
@@ -86,24 +84,28 @@ app.get "/post/:post", (req, res) ->
 	else
 		onError e, req, res
 
-app.get "/projects", (req, res) ->
-	res.render "projects"
+app.get '/projects', (req, res) ->
+	res.render 'projects'
 
-app.get "/resume", (req, res) ->
-	res.render "resume"
+app.get '/resume', (req, res) ->
+	res.render 'resume'
 
-app.get "/golocal/:port?/:path?", (req, res) ->
-	url = "http://#{IP}"
-	if (port = req.params.port)? then url += ":#{port}"
-	if (path = req.params.path)? then url += "/#{path}"
-	res.redirect url
-app.get "/local", (req, res) -> res.end IP
-
-app.get "/pgp(.asc)?", (req, res) ->
+app.get '/pgp(.asc)?', (req, res) ->
 	res.end pgp
 
+app.get '/golocal/:port?/:path?', (req, res) ->
+	{ port, path } = req.params
 
+	res.redirect (
+		url = "http://#{LOCAL_IP}"
+		url += ":#{port}" if port?
+		url += "/#{path}" if path?
+		url
+	)
 
+app.get '/local', (req, res) ->
+	res.end LOCAL_IP + '\n'
 
 port = process.env.PORT || 5000
-app.listen port, -> console.log "Running on port #{port}"
+app.listen port, ->
+	console.log "Running on port #{port}"
