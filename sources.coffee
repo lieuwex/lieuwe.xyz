@@ -105,7 +105,7 @@ trackStream = lastfmClient.stream 'lieuwex'
 lastfm = new Source 'lastfm', (cb) ->
 	trackStream.on 'nowPlaying', (track) -> cb null, track
 	trackStream.on 'stoppedPlaying', -> cb null, null
-	trackStream.on 'error', (e) -> cb e, null
+	trackStream.on 'error', (e) -> cb null, null
 	trackStream.start()
 lastfm.onDisable = -> trackStream.stop()
 Sources.addSource lastfm
