@@ -3,27 +3,29 @@ github = require 'github'
 lastfm = require('lastfm').LastFmNode
 
 class Source
-	constructor: (@name, @onEnable, @options = {}) ->
+	constructor: (@name, @func, @options = {}) ->
 		@enabled = no
 		@_intervalId = undefined
-		@_lastResult = undefined
+		@_callbacks = []
 
 	enable: ->
 		return if @enabled
 		console.log "enabling service '#{@name}'"
-		fn = =>
+
+		run = =>
 			console.log "running service '#{@name}'"
-			@onEnable (err, res) =>
+			@func (err, res) =>
 				if err?
 					console.error "error while fetching data from service '#{@name}'", err
 				else
 					console.log "got new data from service '#{@name}'"
-					@_lastResult = res
-					@_update?()
+
+				for cb in @_callbacks
+					cb err, res
 
 		if @options.interval?
-			@_intervalId = setInterval fn, @options.interval
-		fn()
+			@_intervalId = setInterval run, @options.interval
+		run()
 
 		@enabled = yes
 		undefined
@@ -31,35 +33,43 @@ class Source
 	disable: ->
 		return unless @enabled
 		console.log "disabling service '#{@name}'"
+
 		clearInterval @_intervalId
 		@_intervalId = undefined
+
 		@onDisable?()
 		@enabled = no
 		undefined
+
+	onData: (fn) ->
+		@_callbacks.push fn
 
 class Sources
 	@_sources: {}
 	@_callbacks: []
 
 	@addSource: (source) ->
-		name = source.name
+		if @_sources[source.name]?
+			throw new Error "already a source with '#{source.name}' as name"
 
-		if @_sources[name]?
-			throw new Error "already a source with '#{name}' as name"
+		mapEntry =
+		@_sources[source.name] =
+			lastResult: undefined
+			source: source
 
-		source._update = =>
+		source.onData (e, r) =>
+			mapEntry.lastResult = r unless e?
 			for cb in @_callbacks
-				cb name, source._lastResult
-
-		@_sources[name] = source
+				cb name, e, r
 
 	@getLastData: (name) ->
-		@_sources[name]._lastResult
+		@_sources[name].lastResult
 
 	@onData: (fn) ->
 		@_callbacks.push fn
 
 module.exports = { Sources, Source }
+
 
 mksrc = (name, interval, fn) ->
 	source = new Source name, fn, { interval }
@@ -68,6 +78,7 @@ mksrc = (name, interval, fn) ->
 
 # converts minutes to milliseconds.
 minutes = (val) -> val * 60 * 1000
+
 
 mksrc 'whatpulse', minutes(120), (cb) ->
 	fetch('http://api.whatpulse.org/user.php?user=lieuwex&format=json&formatted=yes')

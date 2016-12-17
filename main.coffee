@@ -9,11 +9,17 @@ fs = require 'fs'
 
 { Sources } = require './sources.coffee'
 
+
+# marked
 marked = require 'marked'
 hljs = require 'highlight.js'
 marked.setOptions highlight: (code, lang) -> hljs.highlight(lang, code).value
 
+
 app = express()
+
+
+# middlewares
 app.set 'view engine', 'jade'
 
 app.use minify()
@@ -30,31 +36,31 @@ onError = (err, req, res, next) ->
 	res.status(500).end 'dat 500 tho.'
 app.use onError
 
-posts = []
+
+# posts
 fs.mkdirSync './posts' unless fs.existsSync './posts'
-fs.readdir './posts', (e, files) ->
-	return if e?
 
-	posts = []
-	files = _.filter files, (f) -> _.last(f.split '.') is 'md'
-	for f in files then do (f) ->
-		fs.readFile "./posts/#{f}", (e, r) ->
-			return if e?
+getPosts = ->
+	_(fs.readdirSync './posts')
+		.filter (fname) ->
+			splitted = fname.split '.'
+			_.last(splitted) is 'md'
 
-			splitted = r.toString().split '\n'
-			posts.push
-				title: f.split('.')[0]
-				creation: new Date(splitted[0]).toISOString().substring 0, 10
-				content: marked splitted[1..].join '\n'
+		.map (fname) ->
+			f = fs.readFileSync "./posts/#{fname}"
+			lines = f.toString().split '\n'
 
-			posts = _(posts)
-				.sortBy (p) -> p.creation
-				.reverse()
-				.value()
+			title: fname.split('.')[0]
+			creation: new Date(lines[0]).toISOString().substring 0, 10
+			content: marked lines[1..].join '\n'
 
-pgp = null
-fs.readFile './key.asc', { encoding: 'utf8' }, (e, r) ->
-	pgp = r unless e?
+		.orderBy 'creation', 'desc'
+		.value()
+
+posts = getPosts()
+
+
+pgp = fs.readFileSync './key.asc', encoding: 'utf8'
 
 app.get '/', (req, res) ->
 	res.render 'index', { posts }
@@ -105,6 +111,7 @@ app.get '/golocal/:port?/:path?', (req, res) ->
 
 app.get '/local', (req, res) ->
 	res.end LOCAL_IP + '\n'
+
 
 port = process.env.PORT || 5000
 app.listen port, ->
