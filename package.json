@@ -2,12 +2,20 @@
   "name": "Lieuwe_Rooijakkers",
   "version": "1.0.0",
   "description": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lieuwex/lieuwe.xyz.git"
+  },
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/lieuwex/lieuwe.xyz/issues"
+  },
+  "homepage": "https://github.com/lieuwex/lieuwe.xyz#readme",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Lieuwe Rooijakkers <lieuwerooijakkers@gmail.com> (http://www.lieuwe.xyz/)",
-  "license": "GPLv3",
   "dependencies": {
     "coffee-script": "^1.8.0",
     "compression": "^1.3.0",
