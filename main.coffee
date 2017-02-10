@@ -112,6 +112,8 @@ app.get '/golocal/:port?/:path?', (req, res) ->
 app.get '/local', (req, res) ->
 	res.end LOCAL_IP + '\n'
 
+# keep as last
+app.use (req, res) -> res.status(404).render '404'
 
 port = process.env.PORT || 5000
 app.listen port, ->
