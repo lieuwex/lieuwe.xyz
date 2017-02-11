@@ -98,10 +98,10 @@ mksrc 'typeracer', minutes(60), (cb) ->
 				bestwpm:    Math.round res.tstats.bestGameWpm
 				averagewpm: Math.round res.tstats.recentAvgWpm
 
-githubClient = new github version: '3.0.0'
+githubClient = new github()
 mksrc 'github', minutes(20), (cb) ->
 	githubClient.activity.getEventsForUser {
-		user: 'lieuwex'
+		username: 'lieuwex'
 		page: 1
 		per_page: 1
 	}, (e, r) ->
