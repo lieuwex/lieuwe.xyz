@@ -100,13 +100,13 @@ mksrc 'typeracer', minutes(60), (cb) ->
 
 githubClient = new github()
 mksrc 'github', minutes(20), (cb) ->
-	githubClient.activity.getEventsForUser {
-		username: 'lieuwex'
-		page: 1
-		per_page: 1
-	}, (e, r) ->
-		if e? then cb e, null
-		else cb null, r[0].created_at.substring 0, 10
+	githubClient.activity.getEventsForUser({
+			username: 'lieuwex'
+			page: 1
+			per_page: 1
+		})
+			.catch (e) -> cb e, null
+			.then (r) -> cb null, r.data[0].created_at.substring 0, 10
 
 lastfmClient = new lastfm
 	'api_key': 'b68ffcb32c581066eff2eaa6443252d4'
