@@ -3,6 +3,7 @@ div.project {
 	border: 3px black solid;
 	cursor: pointer;
 	position: relative;
+	overflow: hidden;
 
 	margin-bottom: 15px;
 }
@@ -19,10 +20,12 @@ div.project > div.projectBack {
 	background-size: cover;
 
 	opacity: .7;
-}
 
+	transition: .5s cubic-bezier(0, 0, 0, 1) transform;
+}
 div.project:hover > div.projectBack {
 	opacity: .6;
+	transform: scale(1.02);
 }
 
 div.project > div.projectTitle {
@@ -34,4 +37,10 @@ div.project > div.projectTitle {
 
 	background-color: black;
 	color: white;
+
+	transform-origin: left center;
+	transition: .5s cubic-bezier(0, 0, 0, 1) transform;
+}
+div.project:hover > .projectTitle {
+	transform: scale(1.1);
 }
