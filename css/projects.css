@@ -32,11 +32,15 @@ div.project > div.projectTitle {
 	position: absolute;
 	bottom: 30px;
 	left: 10px;
-	font-size: 25px;
+	max-width: calc(100% - 60px);
 	padding: 5px;
+	overflow: hidden;
 
 	background-color: black;
 	color: white;
+	white-space: nowrap;
+	font-size: 25px;
+	text-overflow: ellipsis;
 
 	transform-origin: left center;
 	transition: .5s cubic-bezier(0, 0, 0, 1) transform;
