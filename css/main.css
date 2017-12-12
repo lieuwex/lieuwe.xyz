@@ -29,6 +29,8 @@ a {
 	font-size: 3em;
 	text-transform: uppercase;
 	letter-spacing: .2em;
+	overflow-wrap: break-word;
+	hyphens: auto;
 }
 
 div.sideBar {
