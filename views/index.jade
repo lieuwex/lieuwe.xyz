@@ -3,6 +3,9 @@ extends ./main.jade
 block head
 	link(rel="stylesheet", href="css/index.css")
 
+block pageHeader
+	| Blogposts
+
 block content
 	each post, i in posts
 		a(href="/post/#{post.title}")

@@ -23,6 +23,14 @@ a {
 	text-decoration: none;
 }
 
+.pageHeader {
+	margin-top: 0;
+	margin-bottom: .2em;
+	font-size: 3em;
+	text-transform: uppercase;
+	letter-spacing: .2em;
+}
+
 div.sideBar {
 	position: fixed;
 	right: 0;

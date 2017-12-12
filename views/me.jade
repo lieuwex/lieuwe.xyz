@@ -28,6 +28,9 @@ block head
 block title
 	title= "Lieuwe Rooijakkers | About me"
 
+block pageHeader
+	| About me
+
 block content
 	- var age = ~~((new Date().getTime() - new Date(1998, 8, 18).getTime()) / 31556952000);
 	img(src="https://www.gravatar.com/avatar/763664ead00ca1ed8e12db1d5ad703c5?s=175&d=identicon&r=PG", id="profilePicture")
