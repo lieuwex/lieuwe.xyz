@@ -1,4 +1,4 @@
-img {
+img#profilePicture {
 	border: 3px black solid;
 	float: left;
 	margin-right: 25px;
@@ -9,7 +9,7 @@ div.me {
 }
 
 @media only screen and (max-width: 760px) {
-	img {
+	img#profilePicture {
 		margin-left: auto;
 		margin-right: auto;
 		display: block;
