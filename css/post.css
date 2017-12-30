@@ -8,6 +8,10 @@ div.content hr {
 	border-bottom: 1px black solid;
 }
 
+hgroup {
+	position: relative;
+}
+
 div.content h1 {
 	line-height: 1;
 	font-weight: 100;
@@ -17,19 +21,30 @@ div.content h1 {
 }
 
 div.content h3 {
-	line-height: 1;
-	font-weight: 100;
-	float: right;
+	position: absolute;
+	right: 0;
+	bottom: -23px; /* HACKY */
 
 	margin: 0;
-	margin-top: 25px;
+	padding: 3px;
+	padding-right: 0;
+
+	background-color: white;
+	border: 1px black solid;
+	border-right: 0;
+
+	font-weight: 100;
 }
 
-div.content img {
+#postContent {
+	margin-top: 20px; /* HACKY */
+}
+
+#postContent img {
 	max-width: 100%;
 }
 
-div.content pre {
+#postContent pre {
 	border: 1px gray solid;
 	padding: 10px;
 	overflow: scroll;
