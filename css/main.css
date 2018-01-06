@@ -46,13 +46,19 @@ img#headerPhoto {
 	top: 30px;
 	right: 30px;
 	z-index: -1;
+	border: 2px transparent solid;
 }
 
 div.siteHeader {
 	margin-top: 100px;
 	text-align: right;
+	border: 2px transparent solid;
 }
 
+a:hover > div.siteHeader,
+a:hover > img#headerPhoto {
+	border-color: black;
+}
 a:hover > div.siteHeader > h1 {
 	background-color: white;
 	color: black;
