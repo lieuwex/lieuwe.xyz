@@ -112,9 +112,6 @@ app.get '/golocal/:port?/:path?', (req, res) ->
 app.get '/local', (req, res) ->
 	res.end LOCAL_IP + '\n'
 
-gooi = require './gooi.js'
-app.use gooi
-
 # keep as last
 app.use (req, res) -> res.status(404).render '404'
 
