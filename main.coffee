@@ -1,4 +1,4 @@
-LOCAL_IP = "94.209.156.25"
+LOCAL_DOMAIN = 'local.lieuwe.xyz'
 
 require './log.coffee'
 
@@ -6,6 +6,7 @@ _ = require 'lodash'
 express = require 'express'
 minify = require 'express-minify'
 fs = require 'fs'
+dns = require 'dns'
 
 { Sources } = require './sources.coffee'
 
@@ -99,18 +100,16 @@ app.get '/resume', (req, res) ->
 app.get '/pgp(.asc)?', (req, res) ->
 	res.end pgp
 
-app.get '/golocal/:port?/:path?', (req, res) ->
-	{ port, path } = req.params
-
-	res.redirect (
-		url = "http://#{LOCAL_IP}"
-		url += ":#{port}" if port?
-		url += "/#{path}" if path?
-		url
-	)
-
 app.get '/local', (req, res) ->
-	res.end LOCAL_IP + '\n'
+	dns.resolve4 LOCAL_DOMAIN, (err, addrs) ->
+		addr = addrs[0]
+
+		if err?
+			onError err, req, res
+		else if addr?
+			res.end "#{addrs[0]}\n"
+		else
+			res.end ''
 
 # keep as last
 app.use (req, res) -> res.status(404).render '404'
