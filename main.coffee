@@ -67,18 +67,11 @@ app.get '/', (req, res) ->
 	res.render 'index', { posts }
 
 app.get '/me', (req, res) ->
-	whatpulse = Sources.getLastData 'whatpulse'
-	typeracer = Sources.getLastData 'typeracer'
-
 	res.render 'me',
 		nowPlaying: Sources.getLastData 'lastfm'
 		githubDate: Sources.getLastData 'github'
-
-		keys: whatpulse.keys
-		clicks: whatpulse.clicks
-
-		bestwpm: typeracer.bestwpm
-		averagewpm: typeracer.averagewpm
+		whatpulse: Sources.getLastData 'whatpulse'
+		typeracer: Sources.getLastData 'typeracer'
 
 app.get '/post/:post', (req, res) ->
 	name = unescape req.params.post
