@@ -64,10 +64,9 @@ posts = getPosts()
 pgp = fs.readFileSync './key.asc', encoding: 'utf8'
 
 app.get '/', (req, res) ->
-	res.render 'index', { posts }
+	res.render 'index',
+		posts: posts
 
-app.get '/me', (req, res) ->
-	res.render 'me',
 		nowPlaying: Sources.getLastData 'lastfm'
 		githubDate: Sources.getLastData 'github'
 		whatpulse: Sources.getLastData 'whatpulse'
