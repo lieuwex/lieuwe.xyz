@@ -1,5 +1,5 @@
 fetch = require 'node-fetch'
-github = require 'github'
+github = require '@octokit/rest'
 lastfm = require('lastfm').LastFmNode
 
 class Source
