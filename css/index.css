@@ -1,8 +1,3 @@
-div.me {
-	margin-top: 5px;
-	margin-bottom: 25px;
-}
-
 div.content > hr {
 	border: 0;
 	border-bottom: 1px black solid;
@@ -11,7 +6,7 @@ div.content > hr {
 div.post {
 	border: 1px black solid;
 	padding: 15px;
-
+	
 	color: black !important;
 	background-color: white;
 }
