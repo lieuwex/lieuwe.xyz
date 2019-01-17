@@ -1,1 +1,1 @@
-web: coffee main.coffee
+web: npm run start

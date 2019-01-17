@@ -21,7 +21,7 @@ app = express()
 
 
 # middlewares
-app.set 'view engine', 'jade'
+app.set 'view engine', 'pug'
 
 app.use minify()
 app.use express.static __dirname + '/public'

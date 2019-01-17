@@ -100,7 +100,7 @@ mksrc 'typeracer', minutes(60), (cb) ->
 
 githubClient = new github()
 mksrc 'github', minutes(20), (cb) ->
-	githubClient.activity.getEventsForUser({
+	githubClient.activity.listEventsForUser({
 			username: 'lieuwex'
 			page: 1
 			per_page: 1

@@ -13,20 +13,21 @@
   "homepage": "https://github.com/lieuwex/lieuwe.xyz#readme",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "coffee main.coffee"
   },
   "author": "Lieuwe Rooijakkers <lieuwerooijakkers@gmail.com> (http://www.lieuwe.xyz/)",
   "dependencies": {
-    "@octokit/rest": "^15.15.1",
+    "@octokit/rest": "^16.9.0",
     "coffee-script": "^1.12.7",
     "compression": "^1.7.3",
     "express": "^4.16.4",
     "express-minify": "^1.0.0",
     "highlight.js": "^9.13.1",
-    "jade": "^1.11.0",
     "lastfm": "^0.9.2",
     "lodash": "^4.17.11",
-    "marked": "^0.3.19",
-    "node-fetch": "^1.7.3"
+    "marked": "^0.6.0",
+    "node-fetch": "^2.3.0",
+    "pug": "^2.0.3"
   }
 }
