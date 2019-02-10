@@ -80,15 +80,6 @@ mksrc = (name, interval, fn) ->
 minutes = (val) -> val * 60 * 1000
 
 
-mksrc 'whatpulse', minutes(120), (cb) ->
-	fetch('http://api.whatpulse.org/user.php?user=lieuwex&format=json&formatted=yes')
-		.then (res) -> res.json()
-		.catch (e) -> cb e, null
-		.then (res) ->
-			cb null,
-				keys: res.Keys
-				clicks: res.Clicks
-
 mksrc 'typeracer', minutes(60), (cb) ->
 	fetch('http://typeracerdata.appspot.com/users?id=tr:lieuwex')
 		.then (res) -> res.json()

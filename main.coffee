@@ -70,7 +70,6 @@ app.get '/me', (req, res) ->
 	res.render 'me',
 		nowPlaying: Sources.getLastData 'lastfm'
 		githubDate: Sources.getLastData 'github'
-		whatpulse: Sources.getLastData 'whatpulse'
 		typeracer: Sources.getLastData 'typeracer'
 
 app.get '/post/:post', (req, res) ->
