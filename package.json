@@ -19,7 +19,7 @@
   "author": "Lieuwe Rooijakkers <lieuwerooijakkers@gmail.com> (http://www.lieuwe.xyz/)",
   "dependencies": {
     "@octokit/rest": "^16.9.0",
-    "coffee-script": "^1.12.7",
+    "coffeescript": "^2.4.0",
     "compression": "^1.7.3",
     "express": "^4.16.4",
     "express-minify": "^1.0.0",
