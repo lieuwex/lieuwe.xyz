@@ -9,6 +9,7 @@ fs = require 'fs'
 dns = require 'dns'
 
 { Sources } = require './sources.coffee'
+getRss = require './rss.coffee'
 
 
 # marked
@@ -59,6 +60,7 @@ getPosts = ->
 		.value()
 
 posts = getPosts()
+rssFeed = getRss posts
 
 
 pgp = fs.readFileSync './key.asc', encoding: 'utf8'
@@ -82,6 +84,9 @@ app.get '/post/:post', (req, res) ->
 		res.status(404).render '404'
 	else
 		onError e, req, res
+
+app.get '/rss', (req, res) ->
+	res.end rssFeed
 
 app.get '/projects', (req, res) ->
 	res.render 'projects'
