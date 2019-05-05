@@ -5,39 +5,29 @@ div.content {
 div.content hr {
 	line-height: 1;
 	border: 0;
-	border-bottom: 1px black solid;
+	border-bottom: 1px #000 solid;
 }
 
 hgroup {
-	position: relative;
+	display: inline-block;
+	margin-bottom: 10px;
 }
 
 div.content h1 {
+	margin: 0;
 	line-height: 1;
 	font-weight: 100;
 	font-size: 2.5em;
-	margin: 0;
-	display: inline;
 }
 
 div.content h3 {
-	position: absolute;
-	right: 0;
-	bottom: -23px; /* HACKY */
-
 	margin: 0;
-	padding: 3px;
-	padding-right: 0;
-
-	background-color: white;
-	border: 1px black solid;
-	border-right: 0;
-
+	margin-top: 10px;
 	font-weight: 100;
 }
 
 #postContent {
-	margin-top: 20px; /* HACKY */
+	margin-top: 20px;
 }
 
 #postContent img {
@@ -49,4 +39,9 @@ div.content h3 {
 	padding: 10px;
 	overflow: scroll;
 	-webkit-overflow-scrolling: touch;
+}
+
+#postContent h2 {
+	margin-top: 1em;
+	margin-bottom: -.4em;
 }
